@@ -23,7 +23,17 @@
   $conn_string = "host=localhost port=5432 dbname=tpGeo user=php password=a";
   $dsn = pg_pconnect($conn_string);
 
+ // Get the visitor's IP address
+ $ipclient = $_SERVER['REMOTE_ADDR'];
 
+ // Look up the country code for the IP address
+ $country_code = geoip_country_code_by_name($ipclient);
+
+ // If the country code is not "FR" (France), block access
+ if ($country_code !== 'FR') {
+    header('Location: 403.php');
+  exit;
+ }
   // $ip = $_POST['ip'];
       $ip = $_POST['ip'] ?? '';
       if ($ip = 'local'){
